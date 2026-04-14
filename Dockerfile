@@ -1,4 +1,4 @@
-FROM mediawiki:1.45.1
+FROM mediawiki:1.45.3
 
 ARG CITIZEN_VER=3.12.0
 ARG MW_VERSION=REL1_45
