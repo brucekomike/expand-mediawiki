@@ -1,7 +1,7 @@
-FROM mediawiki:1.45.3
+FROM mediawiki:1.46.0
 
-ARG CITIZEN_VER=3.12.0
-ARG MW_VERSION=REL1_45
+ARG CITIZEN_VER=3.15.0
+ARG MW_VERSION=REL1_46
 
 ARG EXTENSIONS_REPO_URL="https://github.com/wikimedia/mediawiki-extensions-"
 ARG EXTENSIONS_LIST="Popups PreToClip \
@@ -33,5 +33,5 @@ RUN git clone https://github.com/brucekomike/MiscTools MiscTools $GIT_VAR
 
 WORKDIR /var/www/html/skins
 
-# Updated to version 3.12.0
-RUN git clone https://github.com/StarCitizenTools/mediawiki-skins-Citizen Citizen $GIT_VAR
+# Updated to version 3.15.0
+RUN git clone --branch "v$CITIZEN_VER" https://github.com/StarCitizenTools/mediawiki-skins-Citizen Citizen $GIT_VAR
