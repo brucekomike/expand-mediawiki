@@ -14,6 +14,8 @@ LDAPProvider LDAPSyncAll"
 
 ARG GIT_VAR="--branch $MW_VERSION --single-branch --depth 1"
 
+ENV COMPOSER_ALLOW_SUPERUSER=1
+
 WORKDIR /var/www/html/extensions
 RUN for extn in $EXTENSIONS_LIST; do \
         echo "Cloning extension: $extn"; \
@@ -31,7 +33,7 @@ RUN git clone https://github.com/octfx/mediawiki-extensions-TemplateStylesExtend
 # MiscTools
 RUN git clone https://github.com/brucekomike/MiscTools MiscTools $GIT_VAR
 
-RUN set -e; export COMPOSER_ALLOW_SUPERUSER=1; \
+RUN set -e; \
     for dir in /var/www/html/extensions/*/; do \
         echo "Installing Composer dependencies in $dir"; \
         if [ -f "${dir}composer.json" ]; then \
