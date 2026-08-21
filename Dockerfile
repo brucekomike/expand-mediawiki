@@ -37,7 +37,7 @@ RUN set -e; \
     for dir in /var/www/html/extensions/*/; do \
         echo "Installing Composer dependencies in $dir"; \
         if [ -f "${dir}composer.json" ]; then \
-            composer install --working-dir="$dir" --no-dev --no-interaction; \
+            composer install --working-dir="$dir" --no-dev --no-interaction --optimize-autoloader; \
         else \
             echo "No composer.json found in $dir, skipping..."; \
         fi; \
