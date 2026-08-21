@@ -1,6 +1,14 @@
 # expand mediawiki
 mediawiki with my personal selected plugins
 
+## local image builds
+```
+docker build -t expand-mediawiki:local -f Dockerfile .
+docker build --build-arg SOURCE_IMAGE=expand-mediawiki:local -t expand-mediawiki-slim:local -f Dockerfile.slim .
+docker build --build-arg SOURCE_IMAGE=expand-mediawiki:local -t expand-mediawiki-fpm:local -f Dockerfile.fpm .
+docker build --build-arg SOURCE_IMAGE=expand-mediawiki-fpm:local -t expand-mediawiki-fpm-slim:local -f Dockerfile.fpm-slim .
+```
+
 ## usage
 fpm version
 ```

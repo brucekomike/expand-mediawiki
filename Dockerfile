@@ -1,3 +1,5 @@
+FROM composer/composer:2-bin AS composer
+
 FROM mediawiki:1.46.0
 
 ARG CITIZEN_VER=3.20.0
@@ -15,6 +17,8 @@ LDAPProvider LDAPSyncAll"
 ARG GIT_VAR="--branch $MW_VERSION --single-branch --depth 1"
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
+
+COPY --from=composer /composer /usr/bin/composer
 
 WORKDIR /var/www/html/extensions
 RUN for extn in $EXTENSIONS_LIST; do \

@@ -1,52 +1,5 @@
-FROM mediawiki:1.46.0
-
-ARG CITIZEN_VER=3.20.0
-ARG MW_VERSION=REL1_46
-
-ARG EXTENSIONS_REPO_URL="https://github.com/wikimedia/mediawiki-extensions-"
-ARG EXTENSIONS_LIST="Popups PreToClip \
-ConfirmAccount intersection \
-CodeMirror Babel cldr CleanChanges Translate \
-UniversalLanguageSelector PluggableAuth \
-Auth_remoteuser LDAPAuthentication2 \
-LDAPAuthorization LDAPGroups LDAPUserInfo \
-LDAPProvider LDAPSyncAll"
-
-ARG GIT_VAR="--branch $MW_VERSION --single-branch --depth 1"
-
-ENV COMPOSER_ALLOW_SUPERUSER=1
-
-WORKDIR /var/www/html/extensions
-RUN for extn in $EXTENSIONS_LIST; do \
-        echo "Cloning extension: $extn"; \
-        git clone "$EXTENSIONS_REPO_URL$extn" "$extn" $GIT_VAR ; \
-    done
-
-ARG GIT_VAR="--single-branch --depth 1"
-
-# DynamicPageList4
-RUN git clone --branch "4.0.6" https://github.com/Universal-Omega/DynamicPageList4.git DynamicPageList4 $GIT_VAR
-
-# TemplateStylesExtender
-RUN git clone --branch "v2.2.0" https://github.com/octfx/mediawiki-extensions-TemplateStylesExtender TemplateStylesExtender $GIT_VAR
-
-# MiscTools
-RUN git clone --branch "main" https://github.com/brucekomike/MiscTools MiscTools $GIT_VAR
-
-RUN set -e; \
-    for dir in /var/www/html/extensions/*/; do \
-        echo "Installing Composer dependencies in $dir"; \
-        if [ -f "${dir}composer.json" ]; then \
-            composer install --working-dir="$dir" --no-dev --no-interaction; \
-        else \
-            echo "No composer.json found in $dir, skipping..."; \
-        fi; \
-    done
-
-WORKDIR /var/www/html/skins
-
-# Updated to version 3.20.0
-RUN git clone --branch "v$CITIZEN_VER" https://github.com/StarCitizenTools/mediawiki-skins-Citizen Citizen $GIT_VAR
+ARG SOURCE_IMAGE=expand-mediawiki:local
+FROM ${SOURCE_IMAGE}
 
 # Remove all .git folders to reduce image size
 RUN find /var/www/html/extensions /var/www/html/skins -type d -name ".git" -exec rm -rf {} +
