@@ -24,14 +24,14 @@ RUN for extn in $EXTENSIONS_LIST; do \
 
 ARG GIT_VAR="--single-branch --depth 1"
 
-# DynamicPageList3
-RUN git clone https://github.com/Universal-Omega/DynamicPageList3.git DynamicPageList3 $GIT_VAR
+# DynamicPageList4
+RUN git clone --branch "4.0.6" https://github.com/Universal-Omega/DynamicPageList4.git DynamicPageList4 $GIT_VAR
 
 # TemplateStylesExtender
-RUN git clone https://github.com/octfx/mediawiki-extensions-TemplateStylesExtender TemplateStylesExtender $GIT_VAR
+RUN git clone --branch "v2.2.0" https://github.com/octfx/mediawiki-extensions-TemplateStylesExtender TemplateStylesExtender $GIT_VAR
 
 # MiscTools
-RUN git clone https://github.com/brucekomike/MiscTools MiscTools $GIT_VAR
+RUN git clone --branch "main" https://github.com/brucekomike/MiscTools MiscTools $GIT_VAR
 
 RUN set -e; \
     for dir in /var/www/html/extensions/*/; do \
