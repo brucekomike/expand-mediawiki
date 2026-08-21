@@ -7,17 +7,25 @@ on:
       - master
     tags:
       - 'v*'
+    paths:
+      - 'Dockerfile*'
+      - '.github/workflows/build-container.yml'
   pull_request:
     branches:
       - main
       - master
-  release:
-    types: [published]
+    paths:
+      - 'Dockerfile*'
+      - '.github/workflows/build-container.yml'
   schedule:
     - cron: '0 0 * * 0'
 
 env:
   REGISTRY: ghcr.io
+
+concurrency:
+  group: build-container-${{ github.workflow }}-${{ github.event_name }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   detect-dockerfiles:
@@ -30,11 +38,27 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.sha }}
 
-      - name: Find all Dockerfiles
+      - name: Find Dockerfiles to build
         id: find
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          matrix=$(find . -type f -name "Dockerfile*" -not -path "./.git/*" | sort | \
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            git fetch --no-tags --depth=1 origin "$BASE_SHA:refs/remotes/origin/pr-base"
+            files=$(git diff --name-only --diff-filter=d origin/pr-base HEAD | awk -F'/' '$NF ~ /^Dockerfile/' | sort -u)
+          else
+            files=$(find . -type f -name "Dockerfile*" -not -path "./.git/*" | sed 's|^\./||' | sort)
+          fi
+
+          if [ -z "$files" ]; then
+            echo "No Dockerfiles selected for this run."
+          fi
+
+          matrix=$(printf '%s\n' "$files" | \
             jq -Rsc '[
               split("\n")[] | select(length > 0) | . as $f |
               (. | split("/")[-1]) as $name |
