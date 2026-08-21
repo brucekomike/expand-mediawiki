@@ -31,18 +31,16 @@ RUN git clone https://github.com/octfx/mediawiki-extensions-TemplateStylesExtend
 # MiscTools
 RUN git clone https://github.com/brucekomike/MiscTools MiscTools $GIT_VAR
 
-RUN export COMPOSER_ALLOW_SUPERUSER=1; \
-    for dir in */; do \
-        if [ -d "$dir" ]; then \
-            echo "Installing Composer dependencies in $dir"; \
-            cd "$dir"; \
-            if [ -f "composer.json" ]; then \
-                composer install --no-dev --no-interaction; \
-            else \
-                echo "No composer.json found in $dir, skipping..."; \
-            fi; \
-            cd ..; \
+RUN set -e; export COMPOSER_ALLOW_SUPERUSER=1; \
+    for dir in /var/www/html/extensions/*/; do \
+        echo "Installing Composer dependencies in $dir"; \
+        cd "$dir"; \
+        if [ -f "composer.json" ]; then \
+            composer install --no-dev --no-interaction; \
+        else \
+            echo "No composer.json found in $dir, skipping..."; \
         fi; \
+        cd /var/www/html/extensions; \
     done
 
 WORKDIR /var/www/html/skins
