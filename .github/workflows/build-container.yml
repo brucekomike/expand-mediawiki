@@ -155,7 +155,6 @@ jobs:
           load: true
           tags: expand-mediawiki:local
           cache-from: type=gha,scope=${{ github.repository }}
-          cache-to: type=gha,scope=${{ github.repository }},mode=max
 
       - name: Build local expand-mediawiki fpm image
         if: matrix.dockerfile == 'Dockerfile.fpm-slim'
@@ -168,7 +167,6 @@ jobs:
           build-args: |
             SOURCE_IMAGE=expand-mediawiki:local
           cache-from: type=gha,scope=${{ github.repository }}-fpm
-          cache-to: type=gha,scope=${{ github.repository }}-fpm,mode=max
 
       - name: Build and push standalone container image
         if: matrix.source_image == ''
