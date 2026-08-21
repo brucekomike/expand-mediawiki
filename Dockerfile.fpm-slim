@@ -34,13 +34,11 @@ RUN git clone https://github.com/brucekomike/MiscTools MiscTools $GIT_VAR
 RUN set -e; export COMPOSER_ALLOW_SUPERUSER=1; \
     for dir in /var/www/html/extensions/*/; do \
         echo "Installing Composer dependencies in $dir"; \
-        cd "$dir"; \
-        if [ -f "composer.json" ]; then \
-            composer install --no-dev --no-interaction; \
+        if [ -f "${dir}composer.json" ]; then \
+            composer install --working-dir="$dir" --no-dev --no-interaction; \
         else \
             echo "No composer.json found in $dir, skipping..."; \
         fi; \
-        cd /var/www/html/extensions; \
     done
 
 WORKDIR /var/www/html/skins
