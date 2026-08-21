@@ -85,9 +85,7 @@ jobs:
                   add_file Dockerfile.fpm-slim
                   ;;
               esac
-            done <<EOF
-            $changed_files
-            EOF
+            done < <(printf '%s\n' "$changed_files")
 
             files=$(printf '%s\n' $selected | sed '/^$/d' | sort -u)
           else
@@ -173,6 +171,19 @@ jobs:
           cache-to: type=gha,scope=${{ github.repository }}-fpm,mode=max
 
       - name: Build and push container image
+        if: matrix.source_image == ''
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.dockerfile }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ github.repository }}${{ matrix.suffix }}
+          cache-to: type=gha,scope=${{ github.repository }}${{ matrix.suffix }},mode=max
+
+      - name: Build and push container image
+        if: matrix.source_image != ''
         uses: docker/build-push-action@v6
         with:
           context: .
