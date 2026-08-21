@@ -1,7 +1,7 @@
 ARG SOURCE_IMAGE=expand-mediawiki:local
+FROM ${SOURCE_IMAGE} AS source_image
+
 FROM mediawiki:1.46.0-fpm
 
-ARG SOURCE_IMAGE
-
-COPY --from=${SOURCE_IMAGE} /var/www/html/extensions /var/www/html/extensions
-COPY --from=${SOURCE_IMAGE} /var/www/html/skins /var/www/html/skins
+COPY --from=source_image /var/www/html/extensions /var/www/html/extensions
+COPY --from=source_image /var/www/html/skins /var/www/html/skins

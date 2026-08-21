@@ -86,8 +86,8 @@ jobs:
                   ;;
               esac
             done <<EOF
-$changed_files
-EOF
+            $changed_files
+            EOF
 
             files=$(printf '%s\n' $selected | sed '/^$/d' | sort -u)
           else
