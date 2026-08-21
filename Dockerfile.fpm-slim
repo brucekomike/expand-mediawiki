@@ -7,7 +7,7 @@ ARG EXTENSIONS_REPO_URL="https://github.com/wikimedia/mediawiki-extensions-"
 ARG EXTENSIONS_LIST="Popups PreToClip \
 ConfirmAccount intersection \
 CodeMirror Babel cldr CleanChanges Translate \
-UniversalLanguageSelector Interwiki PluggableAuth \
+UniversalLanguageSelector PluggableAuth \
 Auth_remoteuser LDAPAuthentication2 \
 LDAPAuthorization LDAPGroups LDAPUserInfo \
 LDAPProvider LDAPSyncAll"
