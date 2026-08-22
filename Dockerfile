@@ -1,11 +1,3 @@
-FROM ubuntu:24.04 AS composer
-
-ARG DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates composer \
-    && rm -rf /var/lib/apt/lists/*
-
 FROM mediawiki:1.46.0
 
 ARG CITIZEN_VER=3.20.0
@@ -24,8 +16,9 @@ ARG GIT_VAR="--branch $MW_VERSION --single-branch --depth 1"
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-COPY --from=composer /usr/bin/composer /usr/local/bin/composer
-COPY --from=composer /usr/share/php /usr/share/php
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends composer \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html/extensions
 RUN for extn in $EXTENSIONS_LIST; do \
