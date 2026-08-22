@@ -1,4 +1,14 @@
-FROM composer/composer:2-bin AS composer
+FROM ubuntu:24.04 AS composer
+
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends ca-certificates curl php-cli \
+    && curl -fsSL https://getcomposer.org/installer -o /tmp/composer-setup.php \
+    && php /tmp/composer-setup.php --install-dir=/usr/local/bin --filename=composer \
+    && rm -f /tmp/composer-setup.php \
+    && apt-get purge -y --auto-remove curl \
+    && rm -rf /var/lib/apt/lists/*
 
 FROM mediawiki:1.46.0
 
@@ -18,7 +28,7 @@ ARG GIT_VAR="--branch $MW_VERSION --single-branch --depth 1"
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
-COPY --from=composer /composer /usr/bin/composer
+COPY --from=composer /usr/local/bin/composer /usr/local/bin/composer
 
 WORKDIR /var/www/html/extensions
 RUN for extn in $EXTENSIONS_LIST; do \
