@@ -1,6 +1,6 @@
-FROM mediawiki:1.46.0
+FROM ubuntu:24.04 AS extensions
 
-ARG CITIZEN_VER=3.20.0
+ARG DEBIAN_FRONTEND=noninteractive
 ARG MW_VERSION=REL1_46
 
 ARG EXTENSIONS_REPO_URL="https://github.com/wikimedia/mediawiki-extensions-"
@@ -14,11 +14,11 @@ LDAPProvider LDAPSyncAll"
 
 ARG GIT_VAR="--branch $MW_VERSION --single-branch --depth 1"
 
-ENV COMPOSER_ALLOW_SUPERUSER=1
-
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends composer \
+    && apt-get install -y --no-install-recommends ca-certificates git composer \
     && rm -rf /var/lib/apt/lists/*
+
+ENV COMPOSER_ALLOW_SUPERUSER=1
 
 WORKDIR /var/www/html/extensions
 RUN for extn in $EXTENSIONS_LIST; do \
@@ -46,6 +46,13 @@ RUN set -e; \
             echo "No composer.json found in $dir, skipping..."; \
         fi; \
     done
+
+FROM mediawiki:1.46.0
+
+ARG CITIZEN_VER=3.20.0
+ARG GIT_VAR="--single-branch --depth 1"
+
+COPY --from=extensions /var/www/html/extensions /var/www/html/extensions
 
 WORKDIR /var/www/html/skins
 
