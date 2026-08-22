@@ -17,6 +17,7 @@ LDAPProvider LDAPSyncAll"
 ARG GIT_VAR="--branch $MW_VERSION --single-branch --depth 1"
 
 ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_NO_AUDIT=1
 
 COPY --from=composer /composer /usr/bin/composer
 
