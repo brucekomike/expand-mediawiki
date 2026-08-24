@@ -22,8 +22,8 @@ RUN for extn in $EXTENSIONS_LIST; do \
 
 ARG GIT_VAR="--single-branch --depth 1"
 
-# DynamicPageList3
-RUN git clone https://github.com/Universal-Omega/DynamicPageList3.git DynamicPageList3 $GIT_VAR
+# DynamicPageList4
+RUN git clone https://github.com/Universal-Omega/DynamicPageList4.git DynamicPageList4 $GIT_VAR
 
 # TemplateStylesExtender
 RUN git clone https://github.com/octfx/mediawiki-extensions-TemplateStylesExtender TemplateStylesExtender $GIT_VAR
@@ -33,5 +33,4 @@ RUN git clone https://github.com/brucekomike/MiscTools MiscTools $GIT_VAR
 
 WORKDIR /var/www/html/skins
 
-# Updated to version 3.20.0
-RUN git clone --branch "v$CITIZEN_VER" https://github.com/StarCitizenTools/mediawiki-skins-Citizen Citizen $GIT_VAR
+RUN git clone https://github.com/StarCitizenTools/mediawiki-skins-Citizen Citizen $GIT_VAR
