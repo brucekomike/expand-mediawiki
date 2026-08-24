@@ -101,6 +101,9 @@ jobs:
             type=semver,pattern={{major}}.{{minor}}
             type=sha,prefix=,format=short
 
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
 
@@ -109,8 +112,10 @@ jobs:
         with:
           context: .
           file: ${{ matrix.dockerfile }}
+          platforms: linux/amd64,linux/arm64
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
+          provenance: false
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ github.repository }}${{ matrix.suffix }}
           cache-to: type=gha,scope=${{ github.repository }}${{ matrix.suffix }},mode=max
