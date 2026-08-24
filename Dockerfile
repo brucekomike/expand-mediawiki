@@ -10,7 +10,7 @@ CodeMirror Babel cldr CleanChanges Translate \
 UniversalLanguageSelector Interwiki PluggableAuth \
 Auth_remoteuser LDAPAuthentication2 \
 LDAPAuthorization LDAPGroups LDAPUserInfo \
-LDAPProvider LDAPSyncAll Lockdown CrawlerProtection"
+LDAPProvider LDAPSyncAll Lockdown"
 
 ARG GIT_VAR="--branch $MW_VERSION --single-branch --depth 1"
 
@@ -22,6 +22,7 @@ RUN for extn in $EXTENSIONS_LIST; do \
 
 ARG GIT_VAR="--single-branch --depth 1"
 
+RUN git clone https://github.com/mywikis/CrawlerProtection CrawlerProtection $GIT_VAR
 # DynamicPageList4
 RUN git clone https://github.com/Universal-Omega/DynamicPageList4.git DynamicPageList4 $GIT_VAR
 
