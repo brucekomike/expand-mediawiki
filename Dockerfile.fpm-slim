@@ -9,7 +9,7 @@ CodeMirror Babel cldr CleanChanges Translate \
 UniversalLanguageSelector Interwiki PluggableAuth \
 Auth_remoteuser LDAPAuthentication2 \
 LDAPAuthorization LDAPGroups LDAPUserInfo \
-LDAPProvider LDAPSyncAll Lockdown"
+LDAPProvider LDAPSyncAll Lockdown JsonConfig"
 
 ARG GIT_VAR="--branch $MW_VERSION --single-branch --depth 1"
 
