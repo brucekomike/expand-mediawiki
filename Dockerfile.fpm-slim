@@ -1,4 +1,4 @@
-FROM mediawiki:1.46.0-fpm
+FROM mediawiki:1.46.2-fpm
 
 ARG MW_VERSION=REL1_46
 
